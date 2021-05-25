@@ -60,16 +60,19 @@ namespace TransComp
                 {
                     //Decompression
                     byte[] outbuf = new byte[0];
-
+                    int csize = 0;
                     switch (compformat)
                     {
                         case "lz2":
-                            Decomp.ISPK.LC_LZ2(File.ReadAllBytes(inputfile), addr, out outbuf);
+                            Decomp.ISPK.LC_LZ2(File.ReadAllBytes(inputfile), addr, out outbuf, out csize);
                             break;
                         case "lz2m":
-                            Decomp.ISPK.LC_LZ2M(File.ReadAllBytes(inputfile), addr, out outbuf);
+                            Decomp.ISPK.LC_LZ2M(File.ReadAllBytes(inputfile), addr, out outbuf, out csize);
                             break;
                     }
+
+                    if (arg_verbose != -1)
+                        ShowDetails(addr, csize, outbuf.Length);
 
                     if (outbuf.Length > 0)
                         File.WriteAllBytes(outputfile, outbuf);
@@ -105,6 +108,13 @@ namespace TransComp
         static void ShowVersion()
         {
             Console.WriteLine("TransComp v" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
+        }
+
+        static void ShowDetails(int addr, int csize, int dsize)
+        {
+            Console.WriteLine("Address: 0x" + addr.ToString("X"));
+            Console.WriteLine("Compressed Size:   0x" + csize.ToString("X"));
+            Console.WriteLine("Decompressed Size: 0x" + dsize.ToString("X"));
         }
     }
 }

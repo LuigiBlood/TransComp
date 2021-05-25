@@ -10,7 +10,7 @@ namespace TransComp
     {
         public static class ISPK
         {
-            public static int LC_LZ2(byte[] input, int addr, out byte[] output)
+            public static int LC_LZ2(byte[] input, int addr, out byte[] output, out int csize)
             {
                 List<byte> buf = new List<byte>();
                 int cmd = -1;
@@ -50,6 +50,7 @@ namespace TransComp
                             {
                                 Console.WriteLine("Error: 0x" + i.ToString("X") + " repeat cmd has wrong address");
                                 output = new byte[0];
+                                csize = 0;
                                 return -1;
                             }
                             for (int j = 0; j < len; j++)
@@ -89,13 +90,12 @@ namespace TransComp
                     if (cmd == 0xFF)
                         break;
                 }
-                int csize = i - addr;
-                int dsize = buf.Count;
+                csize = i - addr;
                 output = buf.ToArray();
                 return 0;
             }
 
-            public static int LC_LZ2M(byte[] input, int addr, out byte[] output)
+            public static int LC_LZ2M(byte[] input, int addr, out byte[] output, out int csize)
             {
                 List<byte> buf = new List<byte>();
                 int cmd = -1;
@@ -135,6 +135,7 @@ namespace TransComp
                             {
                                 Console.WriteLine("Error: 0x" + i.ToString("X") + " repeat cmd has wrong address");
                                 output = new byte[0];
+                                csize = 0;
                                 return -1;
                             }
                             for (int j = 0; j < len; j++)
@@ -181,8 +182,7 @@ namespace TransComp
                     if (cmd == 0xFF)
                         break;
                 }
-                int csize = i - addr;
-                int dsize = buf.Count;
+                csize = i - addr;
                 output = buf.ToArray();
                 return 0;
             }
