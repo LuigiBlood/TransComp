@@ -47,6 +47,10 @@ namespace TransComp
                 string inputfile = args[arg_input + 1];
                 string outputfile = args[arg_output + 1];
                 bool isComp = (arg_comp != -1);
+                int addr = 0;
+
+                if (arg_addr != -1)
+                    addr = int.Parse(args[arg_addr + 1], System.Globalization.NumberStyles.HexNumber);
 
                 if (isComp)
                 {
@@ -57,9 +61,14 @@ namespace TransComp
                     //Decompression
                     byte[] outbuf = new byte[0];
 
-                    if (compformat == "lz2")
+                    switch (compformat)
                     {
-                        Decomp.ISPK.LC_LZ2(File.ReadAllBytes(inputfile), 0, out outbuf);
+                        case "lz2":
+                            Decomp.ISPK.LC_LZ2(File.ReadAllBytes(inputfile), addr, out outbuf);
+                            break;
+                        case "lz2m":
+                            Decomp.ISPK.LC_LZ2M(File.ReadAllBytes(inputfile), addr, out outbuf);
+                            break;
                     }
 
                     if (outbuf.Length > 0)
